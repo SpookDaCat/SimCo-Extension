@@ -138,13 +138,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         chrome.storage.local.set({"realmId": request.realmId})
         currentRealm.innerText = request.realmId == 1 ? "Entrepenures (R2)" : "Magnates (R1)"
     } else if (request.action == "market-response") {
-        currentPrice.innerText = `$${request.data.price}`
+        currentPrice.innerText = `$${request.price}`
 
         chrome.storage.local.get(["discount"], (result) => {
             const {discount} = result
             if (discount) {
                 let contractMultiplier = (100.0 - parseInt(discount))/100
-                let discountPrice = (request.data.price * contractMultiplier).toFixed(3)
+                let discountPrice = (request.price * contractMultiplier).toFixed(3)
                 
                 contractPrice.innerText = `$${discountPrice}`
                 navigator.clipboard.writeText(discountPrice);

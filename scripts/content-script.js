@@ -30,10 +30,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 return response.json();
             })
             .then(json => {
-                let d = json.filter((post) => post["quality"] >= request.quality)[0]
+                let d = json.filter((post) => post["quality"] >= request.quality)[0]["price"]
                 console.log("Sending response", d)
 
-                chrome.runtime.sendMessage({action: "market-response", data: d})
+                chrome.runtime.sendMessage({action: "market-response", price: d})
             })
             .catch(err => {
                 console.log(err);
