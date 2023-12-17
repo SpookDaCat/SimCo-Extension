@@ -74,7 +74,7 @@ chrome.tabs.query({active:true, lastFocusedWindow:true}, tabs => {
 
                     if(resourceId) {
                         chrome.storage.local.set({"resourceId": resourceId})
-                        currentItem.innerText = `(${resourceId}) ${resource}`
+                        currentItem.innerText = resource
                     }
                 });
 
