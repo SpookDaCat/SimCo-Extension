@@ -20,6 +20,5 @@
         "matches": ["https://www.simcompanies.com/*"],
         "js": ["scripts/content-script.js"]
       }
-    ],
-    "host_permissions": ["*://simcompanies.com/*"]
+    ]
 }
