@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "SimCompanies Contract Calculator",
-    "description": "Helps calcuate the contracts in SimCompanies. Will calculate using a given quality and discount percent, the rest us automnatic! Join the Syndicate Discord to support my work. https://discord.gg/E5TjrkfgWV",
+    "description": "Helps calcuate the contracts prices in SimCompanies. Join the Syndicate Discord to support my work. https://discord.gg/E5TjrkfgWV",
     "version": "12.16.23",
     "action":{
         "default_popup": "popup/popup.html",
