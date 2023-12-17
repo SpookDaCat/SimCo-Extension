@@ -27,18 +27,61 @@ label {
     display: inline-block;
 }
 
-.form-row {
-    width: 100%;
-}
+
 
 .container {
     width:360px;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 240px;
+    height: 350px;
     border: 3px solid #428FD7;
     flex-direction: column;
 }
 
+.inline>* {
+    display: inline-block;
+    padding: 0 5px;
+}
+.inline {
+    width:100%;
+    justify-content: center;
+    align-items: center;
+    display:flex
+}
 
+h4, p {
+    margin: 0 !important;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    width:100%;
+    justify-content: center;
+}
+
+.flex-column {
+    display:flex;
+    flex-direction: column;
+    margin: auto 5px;
+}
+
+.flex {
+    display:flex;
+    justify-content: center;
+    padding-top:10px;
+}
+
+button {
+    width: 100px;
+}
+
+.width100 {
+    width: 100%;
+}

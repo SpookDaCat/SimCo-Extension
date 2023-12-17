@@ -2,6 +2,8 @@ const discountLabel = document.getElementById('discount');
 const qualityLabel = document.getElementById('current-quality');
 const qualityInput = document.getElementById("quality");
 const currentItem = document.getElementById("current-item");
+const realmInput = document.getElementById("realm")
+const currentRealm = document.getElementById("current-realm")
 
 function validate(){
     let discount = {"discount": discountLabel.value};
@@ -16,13 +18,16 @@ function init(){
     document.getElementById('contract-form').onsubmit = validate;
 
     // sets from storage
-    chrome.storage.local.get(["discount", "quality"], (result) => {
-        const {discount, quality} = result
+    chrome.storage.local.get(["discount", "quality", "realm"], (result) => {
+        const {discount, quality, realm} = result
         if (discount) {
             discountLabel.value = discount
         }
         if(quality) {
             qualityLabel.innerText = quality
+        }
+        if (realm) {
+            currentRealm.innerText = realm
         }
     })
 
@@ -43,8 +48,6 @@ function init(){
                     .then((response) => response.json())
                     .then((json) => chrome.storage.local.set({"items": json}));
 
-                
-
             } else {
                 voidForm();
             }
@@ -55,11 +58,22 @@ function init(){
 }
 
 function voidForm(text="<p>Current Page does not support sending contracts.</p>") {
-    document.getElementById("form").innerHTML = text
+    document.getElementById("log").innerHTML = text
 }
 
-function fetchMarketPrices(resourceId, realm, quality) {
-    fetch("")
+async function fetchMarketPrices(resourceId, realm, quality) {
+    const response = await fetch(`https://www.simcompanies.com/api/v3/market/${realm}/${resourceId}/`)
+        .then(reposResponse => {
+            return reposResponse.json();
+        })
+        .then(userRepos => {
+            console.log(userRepos);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    const items = await response.json();
+    console.log(items);
 }
 
 function sendRequest(url) {

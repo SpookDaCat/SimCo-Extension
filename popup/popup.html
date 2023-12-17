@@ -16,17 +16,19 @@
                     <tr>
                         <th>Current Item:</th>
                         <th>Quality:</th>
+                        <th>Realm:</th>
                         <th>Lowest Market Price:</th>
                     </tr>
                     <tr>
                         <td id="current-item">1</td>
                         <td id="current-quality">2</td>
+                        <td id="current-realm">3</td>
                         <td id="lowest-market-price">Unknown</td>
                     </tr>
                 </table>
             </div>
 
-            <p style="margin:10px; text-align: center">
+            <p style="margin:10px; text-align: center" id="log">
                 Due to limitations or my own stupidity, item info cannot load in this pop-up. Configure default settings and start the calculation.
             </p>
 
@@ -39,6 +41,10 @@
                     <div class="form-row">
                         <label for="quality"> Default Quality:</label>
                         <input type="number" required name="quality" id="quality" min="0" max="12" value="0" step="1">                    
+                    </div>
+                    <div class="form-row">
+                        <label for="realm"> Default Realm:</label>
+                        <input type="number" required name="realm" id="realm" min="0" max="12" value="0" step="1">                    
                     </div>
                     <button type="submit">Refresh</button>
                 </form>
