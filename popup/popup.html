@@ -1,56 +1,80 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>SimCompanies Contract Calculator</title>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="../styles/global.css">
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
-        
-    </head>
-    <body>
-        <div class="container">
+<html lang="en">
+<head>
+    <title>SimCompanies Contract Calculator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/global.css">
+</head>
+<body>
+    <script src="../scripts/jquery.js"></script>
+    <div class="box">
+        <div>
             <h1>SimCompanies Contract&nbsp;Calculator</h1>
-
-            <div>
-                <table>
-                    <tr>
-                        <th>Current Item:</th>
-                        <th>Quality:</th>
-                        <th>Realm:</th>
-                        <th>Lowest Market Price:</th>
-                    </tr>
-                    <tr>
-                        <td id="current-item">1</td>
-                        <td id="current-quality">2</td>
-                        <td id="current-realm">3</td>
-                        <td id="lowest-market-price">Unknown</td>
-                    </tr>
-                </table>
+            <div class="inline">
+                <p>Extension by: SpookDaCat</p>
             </div>
+            <hr />
 
-            <p style="margin:10px; text-align: center" id="log">
-                Due to limitations or my own stupidity, item info cannot load in this pop-up. Configure default settings and start the calculation.
-            </p>
-
-            <div class="form" id="form">
-                <form id="contract-form">
-                    <div class="form-row">
-                        <label for="discount">Discount Percent:</label>
-                        <input type="number" required name="discount" id="discount" min="0" value="2.5" step="0.1">
-                    </div>
-                    <div class="form-row">
-                        <label for="quality"> Default Quality:</label>
-                        <input type="number" required name="quality" id="quality" min="0" max="12" value="0" step="1">                    
-                    </div>
-                    <div class="form-row">
-                        <label for="realm"> Default Realm:</label>
-                        <input type="number" required name="realm" id="realm" min="0" max="12" value="0" step="1">                    
-                    </div>
-                    <button type="submit">Refresh</button>
-                </form>
-            </div>
             
         </div>
-        <script src="../scripts/scripts.js"></script>
-    </body>
+    
+        <div class="container" id="container">
+            <div>
+                <div class="inline">
+                    <h4>Current Item:</h4>
+                    <p id="current-item">Loading...</p>
+                </div>
+                <div class="inline">
+                    <h4>Current Realm:</h4>
+                    <p id="current-realm">Loading...</p>
+                </div>
+            </div>
+            <form id="contract-form">
+                <div class="flex-row">
+                    <div class="flex-column">
+                        <div class="flex-row">
+                            <label for="quality">Quality:</label>
+                            <input type="number" required name="quality" id="quality" min="0" max="12" value="0" step="1">                    
+                        </div>
+                        <div class="flex-row">
+                            <label for="discount">Discount Percent:</label>
+                            <input type="number" required name="discount" id="discount" min="0" value="2.5" step="0.1">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex">
+                    <button type="submit">Save</button>
+                </div>
+            </form>
+            
+            <div class="width100">
+                <div class="flex-row">
+                    <div class="flex-column">
+                        <h4>Current Lowest Market Price:</h4>
+                    </div>
+                    <div class="flex-column">
+                        <p id="current-price">Please Refresh</p>
+                    </div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-column">
+                        <h4>Discounted Contract Price:</h4>
+                    </div>
+                    <div class="flex-column">
+                        <p id="contract-price">Please Refresh</p>
+                    </div>
+                </div>
+
+                <form id="market-form">
+                    <div class="flex">
+                        <button type="submit">Refresh</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <script src="../scripts/scripts.js"></script>
+</body>
 </html>

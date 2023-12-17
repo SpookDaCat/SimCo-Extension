@@ -1,88 +1,173 @@
-const discountLabel = document.getElementById('discount');
-const qualityLabel = document.getElementById('current-quality');
-const qualityInput = document.getElementById("quality");
+const form = document.getElementById("contract-form");
+const market = document.getElementById("market-form");
+
+//table 
 const currentItem = document.getElementById("current-item");
-const realmInput = document.getElementById("realm")
+const currentQuality = document.getElementById("quality");
 const currentRealm = document.getElementById("current-realm")
+const currentDiscount = document.getElementById("discount")
+const currentPrice = document.getElementById("current-price")
+const contractPrice = document.getElementById("contract-price")
 
-function validate(){
-    let discount = {"discount": discountLabel.value};
-    let quality = {"quality": qualityInput.value};
-
-    qualityLabel.innerText = qualityInput.value;
-
-    chrome.storage.local.set(discount)
-    chrome.storage.local.set(quality)
-}
-function init(){
-    document.getElementById('contract-form').onsubmit = validate;
-
-    // sets from storage
-    chrome.storage.local.get(["discount", "quality", "realm"], (result) => {
-        const {discount, quality, realm} = result
-        if (discount) {
-            discountLabel.value = discount
+form.addEventListener(
+    "submit",
+    (event) => {
+        const data = new FormData(form);
+        for (const entry of data) {
+            const obj = {};
+            obj[entry[0]] = entry[1];
+            chrome.storage.local.set(obj)
         }
-        if(quality) {
-            qualityLabel.innerText = quality
-        }
-        if (realm) {
-            currentRealm.innerText = realm
-        }
-    })
+        event.preventDefault();
+        
+    },
+    false,
+);
 
-    //checks if simco is open
-    chrome.tabs.query({active:true, lastFocusedWindow:true}, tabs => {
-        let url = tabs[0].url;
-
-        if (url && url.startsWith("https://www.simcompanies.com/headquarters/warehouse/")) {
-            let resource = url.replace("https://www.simcompanies.com/headquarters/warehouse/", "") // removes redundant crap
-            resource = resource.charAt(0).toUpperCase() + resource.slice(1).toLowerCase()
-            
-            // valid resource
-            if (resource) {
-                currentItem.innerText = resource
-                chrome.storage.local.set(resource)
-
-                fetch('../items.json')
-                    .then((response) => response.json())
-                    .then((json) => chrome.storage.local.set({"items": json}));
-
-            } else {
-                voidForm();
+market.addEventListener("submit", 
+    (event) => {
+        chrome.storage.local.get(["resourceId", "quality", "realmId", "discount"], (result) => {
+            const {resourceId, quality, realmId, discount} = result
+            if (quality !== undefined && realmId !== undefined) {
+                chrome.tabs.query({
+                    active: true,
+                    currentWindow: true
+                  }, tabs => {
+                    // ...and send a request for the DOM info...
+                        chrome.tabs.sendMessage(
+                            tabs[0].id,
+                            {action: "market-query", realmId: realmId, resourceId: resourceId, quality:parseInt(quality)}
+                        );
+                  }
+                );
             }
+
+
+        });
+        event.preventDefault();
+    }, 
+    false
+);
+
+//init
+chrome.tabs.query({active:true, lastFocusedWindow:true}, tabs => {
+    let url = tabs[0].url;
+
+    if (url && url.startsWith("https://www.simcompanies.com/headquarters/warehouse/")) {
+
+        //#region get resource from URL
+        // removes redundant crap
+        let resource = url.replace("https://www.simcompanies.com/headquarters/warehouse/", "") 
+        
+        
+        // if valid resource
+        if (resource) {
+            
+            chrome.storage.local.set({"resource": resource})
+
+            // get resource id from resource name
+            fetch("../items.json")
+                .then(response => response.json())
+                .then(d => {
+                    
+                    let resourceId = d[`${resource}`];
+
+                    if(resourceId) {
+                        chrome.storage.local.set({"resourceId": resourceId})
+                        currentItem.innerText = `(${resourceId}) ${resource}`
+                    }
+                });
+
+            // set quality and realm from cache
+            
+
+            chrome.storage.local.get(["quality", "realmId", "discount"], (result) => {
+                const {quality, discount} = result
+                if (quality) {
+                    currentQuality.value = quality;
+                }
+    
+                if (discount) {
+                    currentDiscount.value = discount
+                }
+            });
+
         } else {
             voidForm();
         }
-    })
-}
+    //#endregion
 
-function voidForm(text="<p>Current Page does not support sending contracts.</p>") {
-    document.getElementById("log").innerHTML = text
-}
+    } else {
+        voidForm();
+    }
+})
 
-async function fetchMarketPrices(resourceId, realm, quality) {
-    const response = await fetch(`https://www.simcompanies.com/api/v3/market/${realm}/${resourceId}/`)
-        .then(reposResponse => {
-            return reposResponse.json();
-        })
-        .then(userRepos => {
-            console.log(userRepos);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-    const items = await response.json();
-    console.log(items);
-}
-
-function sendRequest(url) {
-    return fetch(url, {
-        mode: 'no-cors',
+async function fetchMarketPrices(resourceId, realm) {
+    $.ajax({
+        type: 'GET',
+        url: `https://www.simcompanies.com/api/v3/market/${realm}/${resourceId}/`,
+        dataType: "json",
         headers: {
-            'Content-Type': 'application/json'
+            "Accept-Language": "en-US,en;q=0.9",
+            "Accept": "application/json, text/plain, */*",
+            "Content-Type": "text/plain"
+        },
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(
+                'X-Requested-With',
+                {
+                    toString: function() { return ''; }
+                }
+            );
+        },
+        success: function(data, status, xhr) {
+            console.log(data)
         }
-    })
+    });
 }
 
-window.onload = init;
+function voidForm(text="<div class=\"flex\"><p>Current Page does not support sending contracts.<br\>Contract Calculation is only supported at <a href=\"Simcompanies.com\">Simcompanies.com</a></p></div>") {
+    document.getElementById("container").innerHTML = text
+}
+
+
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    console.log(request)
+    if (request.action == "me-response") {
+        chrome.storage.local.set({"realmId": request.realmId})
+        currentRealm.innerText = request.realmId == 1 ? "Entrepenures (R2)" : "Magnates (R1)"
+    } else if (request.action == "market-response") {
+        currentPrice.innerText = `$${request.data.price}`
+
+        chrome.storage.local.get(["discount"], (result) => {
+            const {discount} = result
+            if (discount) {
+                let contractMultiplier = (100.0 - parseInt(discount))/100
+                let discountPrice = (request.data.price * contractMultiplier).toFixed(3)
+                
+                contractPrice.innerText = `$${discountPrice}`
+                navigator.clipboard.writeText(discountPrice);
+                //window.confirm(`Save Contract price "${discountPrice}" to clipboard?`)
+
+            }
+        });
+    }
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    // ...query for the active tab...
+    chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, tabs => {
+        if (tabs[0].url.startsWith("https://www.simcompanies.com/")) {
+            chrome.tabs.sendMessage(
+                tabs[0].id,
+                {action: "me-query"}
+            );
+        }
+      
+
+    });
+  });
