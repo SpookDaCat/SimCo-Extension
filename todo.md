@@ -1,4 +1,5 @@
-get realm id from user
+Ensure all items work
 
-make call 
-display best thing
+# Optimize
+Make calls async 
+remove redundant code

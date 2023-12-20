@@ -26,8 +26,8 @@ form.addEventListener(
 
 market.addEventListener("submit", 
     (event) => {
-        chrome.storage.local.get(["resourceId", "quality", "realmId", "discount"], (result) => {
-            const {resourceId, quality, realmId, discount} = result
+        chrome.storage.local.get(["resourceId", "quality", "realmId"], (result) => {
+            const {resourceId, quality, realmId} = result
             if (quality !== undefined && realmId !== undefined) {
                 chrome.tabs.query({
                     active: true,
@@ -41,8 +41,6 @@ market.addEventListener("submit",
                   }
                 );
             }
-
-
         });
         event.preventDefault();
     }, 
@@ -102,35 +100,9 @@ chrome.tabs.query({active:true, lastFocusedWindow:true}, tabs => {
     }
 })
 
-async function fetchMarketPrices(resourceId, realm) {
-    $.ajax({
-        type: 'GET',
-        url: `https://www.simcompanies.com/api/v3/market/${realm}/${resourceId}/`,
-        dataType: "json",
-        headers: {
-            "Accept-Language": "en-US,en;q=0.9",
-            "Accept": "application/json, text/plain, */*",
-            "Content-Type": "text/plain"
-        },
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader(
-                'X-Requested-With',
-                {
-                    toString: function() { return ''; }
-                }
-            );
-        },
-        success: function(data, status, xhr) {
-            console.log(data)
-        }
-    });
-}
-
 function voidForm(text="<div class=\"flex\"><p>Current Page does not support sending contracts.<br\>Contract Calculation is only supported at <a href=\"Simcompanies.com\">Simcompanies.com</a></p></div>") {
     document.getElementById("container").innerHTML = text
 }
-
-
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(request)
