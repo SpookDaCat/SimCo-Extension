@@ -1,7 +1,6 @@
-console.log("CONTENT")
-
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(request)
+
     if(request.action === "me-query") {
 
         const response = fetch("https://www.simcompanies.com/api/v2/companies/me/")
@@ -22,7 +21,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             });
     }
 
-    if (request.action === "market-query") {
+    else if (request.action === "market-query") {
         console.log("Fetching market data...")
         const response = fetch(`https://www.simcompanies.com/api/v3/market/${request.realmId}/${request.resourceId}/`)
             .then(response => {
@@ -38,5 +37,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             .catch(err => {
                 console.log(err);
             });
+    }
+    else if (request.action == "set-price") {
+        /*
+        {
+            action: "set-price",
+            price: "1234"
+        }
+        */
+
+        let priceInputsList = document.querySelectorAll('[name="price"]') // gets all elements with name=price
+        if (priceInputsList.length > 0 && request.price) {
+            let priceInput = priceInputsList[0]
+            console.log(priceInput)
+            priceInput.value = request.price
+        }
     }
   });

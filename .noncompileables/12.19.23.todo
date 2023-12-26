@@ -1,0 +1,9 @@
+Features:
+✔ Restyle interface to look more inline with game @started(23-12-26 12:21) @done(23-12-26 14:54) @lasted(2h33m5s)
+✔ Auto-Insert calculated price into input @started(23-12-26 09:54) @done(23-12-26 10:57) @lasted(1h3m18s)
+✔ Make contract variables pull from page so you dont have to save them @started(23-12-26 11:25) @done(23-12-26 11:41) @lasted(16m8s)
+
+Bug Fixes:
+✔ Some resources dont work @high @done(23-12-26 14:54)
+    ✔ xmas-ornament @done(23-12-26 10:00)
+✔ Remove dead code / files @started(23-12-26 10:02) @done(23-12-26 11:19) @lasted(1h17m40s)

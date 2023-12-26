@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../styles/global.css">
 </head>
 <body>
-    <script src="../scripts/jquery.js"></script>
     <div class="box">
         <div>
             <h1>SimCompanies Contract&nbsp;Calculator</h1>
@@ -20,23 +19,23 @@
         <div class="container" id="container">
             <div>
                 <div class="inline">
-                    <h4>Current Item:</h4>
+                    <h4>Current&nbsp;Item:</h4>
                     <p id="current-item">Loading...</p>
                 </div>
                 <div class="inline">
-                    <h4>Current Realm:</h4>
+                    <h4>Current&nbsp;Realm:</h4>
                     <p id="current-realm">Loading...</p>
                 </div>
             </div>
             <form id="contract-form">
                 <div class="flex-row">
                     <div class="flex-column">
-                        <div class="flex-row">
+                        <div class="flex-row space-between">
                             <label for="quality">Quality:</label>
                             <input type="number" required name="quality" id="quality" min="0" max="12" value="0" step="1">                    
                         </div>
-                        <div class="flex-row">
-                            <label for="discount">Discount Percent:</label>
+                        <div class="flex-row space-between">
+                            <label for="discount">Discount&nbsp;Percent:</label>
                             <input type="number" required name="discount" id="discount" min="0" value="2.5" step="0.1">
                         </div>
                     </div>
@@ -46,21 +45,21 @@
                 </div>
             </form>
             
-            <div class="width100">
-                <div class="flex-row">
+            <div class="w90" id="contract-dialog">
+                <div class="flex-row space-between">
                     <div class="flex-column">
-                        <h4>Current Lowest Market Price:</h4>
+                        <h4>Current&nbsp;Lowest&nbsp;Price:</h4>
                     </div>
                     <div class="flex-column">
-                        <p id="current-price">Please Refresh</p>
+                        <p id="current-price">Refresh</p>
                     </div>
                 </div>
-                <div class="flex-row">
+                <div class="flex-row space-between">
                     <div class="flex-column">
-                        <h4>Discounted Contract Price:</h4>
+                        <h4>Discounted&nbsp;Contract&nbsp;Price:</h4>
                     </div>
                     <div class="flex-column">
-                        <p id="contract-price">Please Refresh</p>
+                        <p id="contract-price">Refresh</p>
                     </div>
                 </div>
 

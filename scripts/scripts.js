@@ -26,26 +26,30 @@ form.addEventListener(
 
 market.addEventListener("submit", 
     (event) => {
-        chrome.storage.local.get(["resourceId", "quality", "realmId"], (result) => {
-            const {resourceId, quality, realmId} = result
-            if (quality !== undefined && realmId !== undefined) {
-                chrome.tabs.query({
-                    active: true,
-                    currentWindow: true
-                  }, tabs => {
-                    // ...and send a request for the DOM info...
-                        chrome.tabs.sendMessage(
-                            tabs[0].id,
-                            {action: "market-query", realmId: realmId, resourceId: resourceId, quality:parseInt(quality)}
-                        );
-                  }
-                );
-            }
-        });
+        getMarketPrices();
         event.preventDefault();
     }, 
     false
 );
+
+function getMarketPrices() {
+    chrome.storage.local.get(["resourceId", "quality", "realmId"], (result) => {
+        const {resourceId, quality, realmId} = result
+        if (quality !== undefined && realmId !== undefined) {
+            chrome.tabs.query({
+                active: true,
+                currentWindow: true
+              }, tabs => {
+                // ...and send a request for the DOM info...
+                    chrome.tabs.sendMessage(
+                        tabs[0].id,
+                        {action: "market-query", realmId: realmId, resourceId: resourceId, quality:parseInt(quality)}
+                    );
+              }
+            );
+        }
+    });
+}
 
 //init
 chrome.tabs.query({active:true, lastFocusedWindow:true}, tabs => {
@@ -100,7 +104,7 @@ chrome.tabs.query({active:true, lastFocusedWindow:true}, tabs => {
     }
 })
 
-function voidForm(text="<div class=\"flex\"><p>Current Page does not support sending contracts.<br\>Contract Calculation is only supported at <a href=\"Simcompanies.com\">Simcompanies.com</a></p></div>") {
+function voidForm(text="<div class=\"flex\"><p>Current Page does not support sending contracts. Contract Calculation is only supported while on the contract screen<br/><br/></p></div>") {
     document.getElementById("container").innerHTML = text
 }
 
@@ -109,37 +113,47 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action == "me-response") {
         chrome.storage.local.set({"realmId": request.realmId})
         currentRealm.innerText = request.realmId == 1 ? "Entrepenures (R2)" : "Magnates (R1)"
+        getMarketPrices();
     } else if (request.action == "market-response") {
         currentPrice.innerText = `$${request.price}`
 
-        chrome.storage.local.get(["discount"], (result) => {
-            const {discount} = result
-            if (discount) {
-                let contractMultiplier = (100.0 - parseInt(discount))/100
-                let discountPrice = (request.price * contractMultiplier).toFixed(3)
-                
-                contractPrice.innerText = `$${discountPrice}`
-                navigator.clipboard.writeText(discountPrice);
-                //window.confirm(`Save Contract price "${discountPrice}" to clipboard?`)
+        var discount = currentDiscount.value;
+        if (discount) {
+            let contractMultiplier = (100.0 - parseInt(discount))/100
+            let discountPrice = (request.price * contractMultiplier).toFixed(3)
+            
+            contractPrice.innerText = `$${discountPrice}`
+            navigator.clipboard.writeText(discountPrice);
 
-            }
-        });
+            chrome.tabs.query({
+                active: true,
+                currentWindow: true
+                }, tabs => {
+                    if (tabs[0].url.startsWith("https://www.simcompanies.com/")) {
+                        chrome.tabs.sendMessage(
+                            tabs[0].id,
+                            { action: "set-price", price: discountPrice }
+                        );
+                    }
+                }
+            );
+        }
     }
 });
 
 window.addEventListener('DOMContentLoaded', () => {
     // ...query for the active tab...
     chrome.tabs.query({
-      active: true,
-      currentWindow: true
-    }, tabs => {
-        if (tabs[0].url.startsWith("https://www.simcompanies.com/")) {
-            chrome.tabs.sendMessage(
-                tabs[0].id,
-                {action: "me-query"}
-            );
+        active: true,
+        currentWindow: true
+        }, tabs => {
+            if (tabs[0].url.startsWith("https://www.simcompanies.com/")) {
+                chrome.tabs.sendMessage(
+                    tabs[0].id,
+                    {action: "me-query"}
+                );
+            }
         }
-      
-
-    });
-  });
+    );
+    }
+  );
