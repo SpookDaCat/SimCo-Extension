@@ -341,35 +341,35 @@
     },
     "sub-orbital-2cd-stage": {
         "id": 90,
-        "type": "normal"
+        "type": "aerospace"
     },
     "sub-orbital-rocket": {
         "id": 91,
-        "type": "normal"
+        "type": "aerospace"
     },
     "orbital-booster": {
         "id": 92,
-        "type": "normal"
+        "type": "aerospace"
     },
     "starship": {
         "id": 93,
-        "type": "normal"
+        "type": "aerospace"
     },
     "bfr": {
         "id": 94,
-        "type": "normal"
+        "type": "aerospace"
     },
     "jumbo-jet": {
         "id": 95,
-        "type": "normal"
+        "type": "aerospace"
     },
     "luxury-jet": {
         "id": 96,
-        "type": "normal"
+        "type": "aerospace"
     },
     "single-engine-plane": {
         "id": 97,
-        "type": "normal"
+        "type": "aerospace"
     },
     "quadcopter": {
         "id": 98,
@@ -377,7 +377,7 @@
     },
     "satelite": {
         "id": 99,
-        "type": "normal"
+        "type": "aerospace"
     },
     "aerospace-research": {
         "id": 100,

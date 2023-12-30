@@ -43,7 +43,10 @@ function getMarketPrices() {
                 // ...and send a request for the DOM info...
 
                     var qual = 0
-                    if (resourceType == "research") {
+                    if (resourceType == "aerospace") {
+                        voidForm(text="<div class=\"flex\"><p>Current Page does not support sending contracts for Aerospace products. They do not have a market that can easily be analyzed.<br/><br/></p></div>")
+                        return;
+                    } else if (resourceType == "research") {
                         qual = 0;
                     } else {
                         qual = parseInt(quality)
