@@ -46,8 +46,10 @@ function getMarketPrices() {
                     if (resourceType == "research") {
                         qual = 0;
                     } else {
-                        parseInt(quality)
+                        qual = parseInt(quality)
                     }
+
+                    //console.log(`Qual: ${qual}`)
                     chrome.tabs.sendMessage(
                         tabs[0].id,
                         {action: "market-query", realmId: realmId, resourceId: resourceId, quality:qual}
@@ -80,8 +82,9 @@ chrome.tabs.query({active:true, lastFocusedWindow:true}, tabs => {
                 .then(d => {
                     
                     let resourceId = d[`${resource}`]["id"];
-                    let resourceType = [`${resource}`]["type"];
+                    let resourceType = d[`${resource}`]["type"];
 
+                    //console.log(resourceType)
                     if(resourceId) {
                         chrome.storage.local.set({"resourceId": resourceId})
                         currentItem.innerText = resource
@@ -120,7 +123,7 @@ function voidForm(text="<div class=\"flex\"><p>Current Page does not support sen
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log(request)
+    //console.log(request)
     if (request.action == "me-response") {
         chrome.storage.local.set({"realmId": request.realmId})
         currentRealm.innerText = request.realmId == 1 ? "Entrepenures (R2)" : "Magnates (R1)"
