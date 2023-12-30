@@ -33,17 +33,24 @@ market.addEventListener("submit",
 );
 
 function getMarketPrices() {
-    chrome.storage.local.get(["resourceId", "quality", "realmId"], (result) => {
-        const {resourceId, quality, realmId} = result
-        if (quality !== undefined && realmId !== undefined) {
+    chrome.storage.local.get(["resourceId", "quality", "realmId", "resourceType"], (result) => {
+        const {resourceId, quality, realmId, resourceType} = result
+        if (quality !== undefined && realmId !== undefined && resourceType !== undefined) {
             chrome.tabs.query({
                 active: true,
                 currentWindow: true
               }, tabs => {
                 // ...and send a request for the DOM info...
+
+                    var qual = 0
+                    if (resourceType == "research") {
+                        qual = 0;
+                    } else {
+                        parseInt(quality)
+                    }
                     chrome.tabs.sendMessage(
                         tabs[0].id,
-                        {action: "market-query", realmId: realmId, resourceId: resourceId, quality:parseInt(quality)}
+                        {action: "market-query", realmId: realmId, resourceId: resourceId, quality:qual}
                     );
               }
             );
@@ -72,11 +79,15 @@ chrome.tabs.query({active:true, lastFocusedWindow:true}, tabs => {
                 .then(response => response.json())
                 .then(d => {
                     
-                    let resourceId = d[`${resource}`];
+                    let resourceId = d[`${resource}`]["id"];
+                    let resourceType = [`${resource}`]["type"];
 
                     if(resourceId) {
                         chrome.storage.local.set({"resourceId": resourceId})
                         currentItem.innerText = resource
+                    }
+                    if (resourceType) {
+                        chrome.storage.local.set({"resourceType": resourceType})
                     }
                 });
 

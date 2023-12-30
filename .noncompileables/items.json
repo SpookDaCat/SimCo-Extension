@@ -113,31 +113,31 @@
     },
     "plant-research": {
         "id": 29,
-        "type": "research"
+        "type": "normal"
     },
     "energy-research": {
         "id": 30,
-        "type": "research"
+        "type": "normal"
     },
     "mining-research": {
         "id": 31,
-        "type": "research"
+        "type": "normal"
     },
     "electronics-research": {
         "id": 32,
-        "type": "research"
+        "type": "normal"
     },
     "breeding-research": {
         "id": 33,
-        "type": "research"
+        "type": "normal"
     },
     "chemistry-research": {
         "id": 34,
-        "type": "research"
+        "type": "normal"
     },
     "software": {
         "id": 35,
-        "type": "research"
+        "type": "normal"
     },
     "cotton": {
         "id": 40,
@@ -213,11 +213,11 @@
     },
     "automotive-research": {
         "id": 58,
-        "type": "research"
+        "type": "normal"
     },
     "fashion-research": {
         "id": 59,
-        "type": "research"
+        "type": "normal"
     },
     "underwear": {
         "id": 60,
@@ -381,7 +381,7 @@
     },
     "aerospace-research": {
         "id": 100,
-        "type": "research"
+        "type": "normal"
     },
     "reinforced-concrete": {
         "id": 101,
@@ -433,7 +433,7 @@
     },
     "materials-research": {
         "id": 113,
-        "type": "research"
+        "type": "normal"
     },
     "robots": {
         "id": 114,
@@ -561,6 +561,6 @@
     },
     "recipes": {
         "id": 145,
-        "type": "research"
+        "type": "normal"
     }
 }
